@@ -2,91 +2,143 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Invitation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Special Surprise</title>
     <style>
         :root {
-            --primary-pink: #ff4b6e;
-            --soft-gold: #d4af37;
+            --bg: #fff0f3;
+            --heart-color: #ff4d6d;
+            --gold: #c6a664;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #fff5f7;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            overflow: hidden; /* Prevents scrolling during the game */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            touch-action: manipulation;
+        }
+        #game-container {
             text-align: center;
+            z-index: 10;
         }
-        .card {
+        .heart {
+            position: absolute;
+            font-size: 40px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s;
+            animation: float 4s linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(110vh) rotate(0deg); }
+            100% { transform: translateY(-20vh) rotate(360deg); }
+        }
+        .counter {
+            font-size: 1.2rem;
+            color: var(--heart-color);
+            font-weight: bold;
             background: white;
-            padding: 2rem;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        /* Invitation Card */
+        #invite-card {
+            display: none;
+            background: white;
+            padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 350px;
-            width: 90%;
-            border: 2px solid var(--soft-gold);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            max-width: 320px;
+            width: 85%;
+            border: 3px solid var(--gold);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
         }
-        h1 { color: var(--primary-pink); margin-bottom: 10px; }
-        p { color: #555; line-height: 1.5; }
-        input {
-            padding: 12px;
-            width: 80%;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-size: 16px; /* Prevents iOS zoom-in on focus */
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
-        button {
-            background: var(--primary-pink);
+        h1 { color: var(--heart-color); margin-top: 0; }
+        .details { font-size: 1.1rem; color: #444; line-height: 1.6; }
+        .btn {
+            background: var(--heart-color);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
         }
-        button:active { transform: scale(0.95); }
-        .hidden { display: none; }
-        #confetti { font-size: 30px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="card" id="login-card">
-        <h1>🔐 Top Secret</h1>
-        <p>To view this invitation, please enter the secret password:</p>
-        <p><i>(Hint: Our favorite pizza place)</i></p>
-        <input type="text" id="pass-input" placeholder="Type here...">
-        <br>
-        <button onclick="checkPass()">Unlock Invitation</button>
+    <div id="game-container">
+        <div class="counter" id="score-board">Catch 10 Hearts to Reveal Your Surprise: <span id="count">0</span>/10</div>
     </div>
 
-    <div class="card hidden" id="invite-card">
-        <h1>✨ It's a Date! ✨</h1>
-        <p>You are cordially invited to:</p>
-        <h2 style="color:var(--soft-gold)">The Fancy Pasta Night</h2>
-        <p>📅 This Friday @ 7:00 PM</p>
-        <p>📍 The Kitchen (Chef Me is cooking!)</p>
-        <div id="confetti">🍷🍝🕯️</div>
-        <p>Will you attend?</p>
-        <button onclick="alert('Yay! I\'ll start the prep!')">Yes, I'm in!</button>
+    <div id="invite-card">
+        <h1>✨ You Won! ✨</h1>
+        <div class="details">
+            <p>For being the best at everything (including this game), you are invited to:</p>
+            <h2 style="color:var(--gold)">A Surprise Date Night</h2>
+            <p>📅 <b>This Saturday</b><br>
+               📍 <b>Secret Location (Car leaves at 6 PM)</b></p>
+            <p><i>Formal attire? Maybe. <br>Good vibes? Definitely.</i></p>
+        </div>
+        <button class="btn" onclick="alert('Date locked in! ❤️')">I'll be ready!</button>
     </div>
 
     <script>
-        function checkPass() {
-            const input = document.getElementById('pass-input').value.toLowerCase();
-            // CHANGE "pizza" TO YOUR REAL SECRET WORD BELOW
-            if (input === "pizza") {
-                document.getElementById('login-card').classList.add('hidden');
-                document.getElementById('invite-card').classList.remove('hidden');
-            } else {
-                alert("Incorrect! Try again, beautiful.");
-            }
-        }
-    </script>
+        let count = 0;
+        const target = 10;
+        const container = document.body;
 
+        function createHeart() {
+            if (count >= target) return;
+
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 80 + 10 + 'vw';
+            // Random speed
+            const duration = Math.random() * 3 + 2;
+            heart.style.animationDuration = duration + 's';
+            
+            heart.onclick = () => {
+                count++;
+                document.getElementById('count').innerText = count;
+                heart.style.transform = 'scale(0)';
+                setTimeout(() => heart.remove(), 100);
+                
+                if (count === target) {
+                    showInvitation();
+                }
+            };
+
+            container.appendChild(heart);
+            
+            // Remove heart after animation to keep DOM clean
+            setTimeout(() => {
+                if (heart.parentElement) heart.remove();
+            }, duration * 1000);
+        }
+
+        function showInvitation() {
+            document.getElementById('game-container').style.display = 'none';
+            document.getElementById('invite-card').style.display = 'block';
+            // Stop background hearts
+            clearInterval(gameInterval);
+        }
+
+        const gameInterval = setInterval(createHeart, 800);
+    </script>
 </body>
 </html>
