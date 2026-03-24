@@ -15,7 +15,7 @@
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg);
-            overflow: hidden; /* Prevents scrolling during the game */
+            overflow: hidden; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -47,53 +47,53 @@
             border-radius: 50px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
-        /* Invitation Card */
+
+        /* Updated Win Window */
         #invite-card {
             display: none;
             background: white;
-            padding: 30px;
-            border-radius: 20px;
+            padding: 40px 20px;
+            border-radius: 0px; /* Square edges for a "wide" feel */
             box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            max-width: 320px;
-            width: 85%;
-            border: 3px solid var(--gold);
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 100%; /* Spans the width of the window */
+            text-align: center;
+            border-top: 5px solid var(--heart-color);
+            border-bottom: 5px solid var(--heart-color);
+            animation: popIn 0.5s ease-out;
             z-index: 100;
         }
+        
         @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
-        h1 { color: var(--heart-color); margin-top: 0; }
-        .details { font-size: 1.1rem; color: #444; line-height: 1.6; }
-        .btn {
-            background: var(--heart-color);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 1rem;
-            margin-top: 20px;
-            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
+
+        h1 { 
+            color: var(--heart-color); 
+            margin: 0; 
+            font-size: 3.5rem; /* Large headline */
+            width: 100%;
+            text-transform: uppercase;
+        }
+
+        .details { 
+            font-size: 1.2rem; 
+            color: #444; 
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
 
     <div id="game-container">
-        <div class="counter" id="score-board">Catch 10 Hearts to Reveal Your Surprise: <span id="count">0</span>/10</div>
+        <div class="counter" id="score-board">Catch 10 Hearts to Win: <span id="count">0</span>/10</div>
     </div>
 
     <div id="invite-card">
-        <h1>✨ You Won! ✨</h1>
+        <h1>🏆 YOU WON 🏆</h1>
         <div class="details">
-            <p>For being the best at everything (including this game), you are invited to:</p>
-            <h2 style="color:var(--gold)">A Surprise Date Night</h2>
-            <p>📅 <b>This Saturday</b><br>
-               📍 <b>Secret Location (Car leaves at 6 PM)</b></p>
-            <p><i>Formal attire? Maybe. <br>Good vibes? Definitely.</i></p>
+            <p>Congratulations! Now you are officially the best penguin ever 🏅</p>
         </div>
-        <button class="btn" onclick="alert('Date locked in! ❤️')">I'll be ready!</button>
     </div>
 
     <script>
@@ -108,7 +108,7 @@
             heart.className = 'heart';
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 80 + 10 + 'vw';
-            // Random speed
+            
             const duration = Math.random() * 3 + 2;
             heart.style.animationDuration = duration + 's';
             
@@ -125,7 +125,6 @@
 
             container.appendChild(heart);
             
-            // Remove heart after animation to keep DOM clean
             setTimeout(() => {
                 if (heart.parentElement) heart.remove();
             }, duration * 1000);
@@ -134,7 +133,6 @@
         function showInvitation() {
             document.getElementById('game-container').style.display = 'none';
             document.getElementById('invite-card').style.display = 'block';
-            // Stop background hearts
             clearInterval(gameInterval);
         }
 
